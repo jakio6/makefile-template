@@ -11,7 +11,7 @@ my toy makefile template
 
 - `EXECUTABLES`: 可执行文件
 - `x_BINPATH`: 生成可执行文件路径(默认为BINPATH(默认为bin))
-- `x_GROUPS`: 生成可执行文件的时候, 加入的源文件group
+- `x_GROUPS`: 生成可执行文件的时候, 加入的源文件group(默认是所有的)
 - `x_BIN`: 生成的可执行文件名称(默认为在EXECUTABLES中的名称)
 
 问题:

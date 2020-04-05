@@ -8,7 +8,7 @@
 #
 # EXECUTABLES: executable defined
 # x_BINPATH: directory to put generated executable
-# x_GROUPS: source group that would be linked to this executable
+# x_GROUPS: source group that would be linked to this executable(default to all groups)
 # x_BIN: the generated executable name
 #
 #
@@ -29,7 +29,7 @@ define GROUP_TEMPLATE =
 $(1)_CFLAGS ?= $$(CFLAGS)
 $(1)_LDFLAGS ?= $$(LDFLAGS)
 
-$(1)_DIR ?= $$(SRC_DIR)
+$(1)_DIR ?= $$(SRCDIR)
 $(1)_BUILD ?= $$(BUILD)
 
 $(1)_OBJS=$$($(1)_SRCS:%.c=$$($(1)_BUILD)/%_$(1).o)
@@ -63,11 +63,12 @@ define EXE_TEMPLATE =
 $$(eval $$(call GROUP_TEMPLATE,$(1)))
 $(1)_BINPATH ?= $$(BINPATH)
 $(1)_BIN ?= $(1)
+$(1)_GROUPS ?= $$(SOURCE_GROUPS)
 
 ifneq ($$($(1)_BINPATH),.)
 
 $$($(1)_BINPATH)/$$($(1)_BIN): $$($(1)_OBJS) $$(foreach grp,$$($(1)_GROUPS),$$($$(grp)_OBJS)) | $$($(1)_BINPATH)
-	$$(CC) $$($(1)_CFLAGS) $$^ -o $$@
+	$$(CC) $$($(1)_CFLAGS) $$($(1)_LDFLAGS) $$^ -o $$@
 
 ifeq ($$(filter $$($(1)_BINPATH), $$(__BUILD_DIR_SEEN)),)
 __BUILD_DIR_SEEN += $$($(1)_BINPATH)
@@ -78,7 +79,7 @@ endif
 
 else
 $$($(1)_BIN): $$($(1)_OBJS) $$(foreach grp,$$($(1)_GROUPS),$$($$(grp)_OBJS))
-	$$(CC) $$($(1)_CFLAGS) $$^ -o $$@
+	$$(CC) $$($(1)_CFLAGS) $$($(1)_LDFLAGS) $$^ -o $$@
 
 endif
 
